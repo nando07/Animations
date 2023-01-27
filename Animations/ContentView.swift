@@ -10,24 +10,64 @@ import SwiftUI
 struct ContentView: View {
     
     @State private var animationAmount = 0.0
-
+    @State private var dragAmount = CGSize.zero
+    let letter = Array("Hello, SwiftUI")
+    @State private var enabled = false
+    
     var body: some View {
         
-        
-        // Coin rotating 360 degrees with spring effect
-        Button("Tap Me") {
-            withAnimation(.interpolatingSpring(stiffness: 5, damping: 1)) {
-                animationAmount += 360
+//        Text("Offset by passing CGSize()")
+//            .border(Color.green)
+//            .offset(CGSize(width: 0, height: 80))
+//            .border(Color.gray)
+           
+
+        HStack(spacing: 0) {
+            ForEach(0..<letter.count) { num in
+                Text(String(letter[num]))
+                    .padding(5)
+                    .font(.title)
+                    .background(enabled ? .blue : .red)
+                    .offset(dragAmount)
+                    .animation(.default.delay(Double(num) / 20), value: dragAmount
+                    )
             }
         }
-                 // do nothing
-             .padding(50)
-             .background(.red)
-             .foregroundColor(.white)
-             .clipShape(Circle())
-             .rotation3DEffect(.degrees(animationAmount), axis: (x: 0, y: 1, z: 0))
-
-         
+        .gesture(
+            DragGesture()
+                .onChanged { dragAmount = $0.translation }
+                .onEnded { _ in
+                    dragAmount = .zero
+                    enabled.toggle()
+                }
+            )
+        
+//        LinearGradient(gradient: Gradient(colors: [.yellow, .red]), startPoint: .topLeading, endPoint: .bottomTrailing)
+//            .frame(width:300, height: 200)
+//            .clipShape(RoundedRectangle(cornerRadius: 10))
+//            .offset(dragAmount)
+//            .gesture(
+//            DragGesture()
+//                .onChanged { dragAmount = $0.translation }
+//                .onEnded { _ in
+//                    withAnimation{ dragAmount = .zero }
+//                }
+//                )
+        
+//        // Coin rotating 360 degrees with spring effect
+//        Button("Tap Me") {
+//            withAnimation(.interpolatingSpring(stiffness: 5, damping: 1)) {
+//                animationAmount += 360
+//            }
+//        }
+//                 // do nothing
+//             .padding(50)
+//             .background(.red)
+//             .foregroundColor(.white)
+//             .clipShape(Circle())
+//             .rotation3DEffect(.degrees(animationAmount), axis: (x: 0, y: 1, z: 0))
+//
+//
         
         
 //        print(animationAmount)
