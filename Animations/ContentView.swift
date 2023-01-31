@@ -14,33 +14,53 @@ struct ContentView: View {
     let letter = Array("Hello, SwiftUI")
     @State private var enabled = false
     
+    @State private var isShowingRed = false
+    
     var body: some View {
         
+        VStack {
+            Button("tap me") {
+                withAnimation {
+                    isShowingRed.toggle()
+                }
+            }
+            
+            if isShowingRed {
+                Rectangle()
+                    .fill(.red)
+                    .frame(width: 200, height: 200)
+                    .transition(.asymmetric(insertion: .scale, removal: .opacity))
+                
+            }
+        }
 //        Text("Offset by passing CGSize()")
 //            .border(Color.green)
 //            .offset(CGSize(width: 0, height: 80))
 //            .border(Color.gray)
            
 
-        HStack(spacing: 0) {
-            ForEach(0..<letter.count) { num in
-                Text(String(letter[num]))
-                    .padding(5)
-                    .font(.title)
-                    .background(enabled ? .blue : .red)
-                    .offset(dragAmount)
-                    .animation(.default.delay(Double(num) / 20), value: dragAmount
-                    )
-            }
-        }
-        .gesture(
-            DragGesture()
-                .onChanged { dragAmount = $0.translation }
-                .onEnded { _ in
-                    dragAmount = .zero
-                    enabled.toggle()
-                }
-            )
+//        HStack(spacing: 0) {
+//            ForEach(0..<letter.count) { num in
+//                Text(String(letter[num]))
+//                    .padding(5)
+//                    .font(.title)
+//                    .background(enabled ? .blue : .red)
+//                    .offset(dragAmount)
+//                    .animation(.default.delay(Double(num) / 20), value: dragAmount
+//                    )
+//            }
+//        }
+//        .gesture(
+//            DragGesture()
+//                .onChanged { dragAmount = $0.translation
+//                    print(dragAmount)
+//                }
+//                .onEnded { _ in
+//                    dragAmount = .zero
+//                    print(dragAmount)
+//                    enabled.toggle()
+//                }
+//            )
         
 //        LinearGradient(gradient: Gradient(colors: [.yellow, .red]), startPoint: .topLeading, endPoint: .bottomTrailing)
 //            .frame(width:300, height: 200)
