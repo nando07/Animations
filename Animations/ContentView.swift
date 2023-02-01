@@ -6,33 +6,69 @@
 //
 
 import SwiftUI
+struct CornerRotateModifier: ViewModifier {
+    let amount: Double
+    let anchor: UnitPoint
+    
+    func body(content: Content) -> some View {
+        content
+            .rotationEffect(.degrees(amount), anchor: anchor)
+            .clipped()
+    }
+    
+}
+
+extension AnyTransition {
+    static var pivot: AnyTransition {
+        .modifier(active: CornerRotateModifier(amount: -90, anchor: .topLeading), identity: CornerRotateModifier(amount: 0, anchor: .topLeading))
+    }
+}
+
 
 struct ContentView: View {
     
-    @State private var animationAmount = 0.0
-    @State private var dragAmount = CGSize.zero
-    let letter = Array("Hello, SwiftUI")
-    @State private var enabled = false
-    
+//    @State private var animationAmount = 0.0
+//    @State private var dragAmount = CGSize.zero
+//    let letter = Array("Hello, SwiftUI")
+//    @State private var enabled = false
+//
     @State private var isShowingRed = false
     
+    
+    
     var body: some View {
-        
-        VStack {
-            Button("tap me") {
-                withAnimation {
-                    isShowingRed.toggle()
-                }
-            }
+        ZStack {
+            Rectangle()
+                .fill(.blue)
+                .frame(width: 200, height: 200)
             
             if isShowingRed {
                 Rectangle()
                     .fill(.red)
                     .frame(width: 200, height: 200)
-                    .transition(.asymmetric(insertion: .scale, removal: .opacity))
-                
+                    .transition(.pivot)
             }
         }
+        .onTapGesture {
+            withAnimation {
+                isShowingRed.toggle()
+            }
+        }
+//        VStack {
+//            Button("tap me") {
+//                withAnimation {
+//                    isShowingRed.toggle()
+//                }
+//            }
+//
+//            if isShowingRed {
+//                Rectangle()
+//                    .fill(.red)
+//                    .frame(width: 200, height: 200)
+//                    .transition(.asymmetric(insertion: .scale, removal: .opacity))
+//
+//            }
+//        }
 //        Text("Offset by passing CGSize()")
 //            .border(Color.green)
 //            .offset(CGSize(width: 0, height: 80))
